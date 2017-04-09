@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}Welcome!{% endblock %}</title>
+        {% block stylesheets %}
+            <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+        {% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+    <body>
+        {% block body %}
+            <div class="row">
+                <div id="main" class="col-sm-9">
+                    {% for msg in app.session.flashBag.get('success') %}
+                        <div class="alert alert-success" role="alert">
+                            {{ msg }}
+                        </div>
+                    {% endfor %}
+                    {% block main %}{% endblock %}
+                </div>
+            </div>
+        {% endblock %}
+        {% block javascripts %}
+            <script src="{{ asset('js/jquery-3.2.0.min.js') }}"></script>
+            <script src="{{ asset('js/tether.min.js') }}"></script>
+            <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+        {% endblock %}
+    </body>
+</html>
