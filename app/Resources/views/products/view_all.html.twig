@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block main %}
+
+    {% for index,product in products %}
+        <div class="container">
+            <div class="row">
+                <div class="col-md-2">{{ index+1 }}</div>
+                <div class="col-md-4">{{ product.name }}</div>
+                <div class="col-md-2">{{ product.price }}</div>
+                <div class="col-md-1"><img src="{{ asset('uploads/products/' ~ product.imageUrl) }}" class="img-responsive"></div>
+
+                <div class="col-md-2"><a href="{{ path("edit_product_form", {'id':product.id}) }}">Edit</a></div>
+                <div class="col-md-2"><form method="post" action="{{ path("delete_product_process", {'id':product.id}) }}">
+                        <button type="submit">Delete</button>
+                    </form></div>
+            </div>
+        </div>
+
+    {% endfor %}
+{% endblock %}
+
