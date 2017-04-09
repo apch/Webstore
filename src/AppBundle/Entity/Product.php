@@ -68,6 +68,15 @@ class Product
     private $createdOn;
 
 
+    /**
+     * @ORM\Column(name="image_url", type="string")
+     *
+     * @Assert\NotBlank(message="Please, upload image as JPG file")
+     * @Assert\File(mimeTypes={"image/jpeg"})
+     */
+    private $imageUrl;
+
+
     public function __construct()
     {
         $this->createdOn = new \DateTime();
@@ -193,6 +202,18 @@ class Product
         $this->createdOn = $createdOn;
     }
 
+
+    public function getImageUrl()
+    {
+        return $this->imageUrl;
+    }
+
+    public function setImageUrl($imageUrl)
+    {
+        $this->imageUrl = $imageUrl;
+
+        return $this;
+    }
 
 }
 
