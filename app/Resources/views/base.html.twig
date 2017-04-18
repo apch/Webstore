@@ -8,7 +8,58 @@
         {% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
     </head>
-    <body>
+    <body id="{% block body_id %}{% endblock %}">
+    {% block header %}
+        <header>
+            <div class="navbar navbar-default navbar-static-top" role="navigation">
+                <div class="container">
+                    <div class="navbar-header">
+                        <a href="{{ path('all_products') }}" class="navbar-brand">WEBSTORE</a>
+
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                    </div>
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav navbar-right">
+                            {% if app.user %}
+                                <li>
+                                    <a href="{{ path('add_product_form') }}">
+                                        Insert Product
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('all_products') }}">
+                                        My Profile
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('all_products') }}">
+                                        Logout
+                                    </a>
+                                </li>
+                            {% else %}
+                                <li>
+                                    <a href="{{ path('all_products') }}">
+                                        REGISTER
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="{{ path('all_products') }}">
+                                        LOGIN
+                                    </a>
+                                </li>
+                            {% endif %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </header>
+    {% endblock %}
+
+    <div class="container body-container">
         {% block body %}
             <div class="row">
                 <div id="main" class="col-sm-9">
@@ -21,6 +72,15 @@
                 </div>
             </div>
         {% endblock %}
+    </div>
+
+    {% block footer %}
+        <footer>
+            <div class="container modal-footer">
+                <p>&copy; 2017 - Webstore Project APCH2</p>
+            </div>
+        </footer>
+    {% endblock %}
         {% block javascripts %}
             <script src="{{ asset('js/jquery-3.2.0.min.js') }}"></script>
             <script src="{{ asset('js/tether.min.js') }}"></script>

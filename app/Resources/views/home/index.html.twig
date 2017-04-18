@@ -1,3 +1,6 @@
-<a href="{{ path('all_products') }}">List of products</a>
-<br>
-<a href="{{ path('add_product_form') }}">Add a product</a>
+{% extends 'base.html.twig' %}
+{% block main %}
+    <a href="{{ path('all_products') }}">List of products</a>
+    <br>
+    <a href="{{ path('add_product_form') }}">Add a product</a>
+{% endblock %}
