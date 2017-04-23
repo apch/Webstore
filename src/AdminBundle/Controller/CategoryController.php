@@ -1,9 +1,9 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AdminBundle\Controller;
 
-use AppBundle\Entity\Category;
-use AppBundle\Form\CategoryType;
+use AdminBundle\Entity\Category;
+use AdminBundle\Form\CategoryType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -13,17 +13,17 @@ use Symfony\Component\HttpFoundation\Response;
 class CategoryController extends Controller
 {
     /**
-     * @Route("/categories", name="all_categories")
+     * @Route("/admin/categories", name="all_categories")
      *
      * @return Response
      */
-    public function viewAll()
+    public function viewAllAction()
     {
         $categories = $this->getDoctrine()
             ->getRepository(Category::class)
             ->findAll();
 
-        return $this->render('categories/view_all.html.twig',
+        return $this->render('admin/categories/view_all.html.twig',
             [
                 'categories' => $categories
             ]
@@ -31,15 +31,15 @@ class CategoryController extends Controller
     }
 
     /**
-     * @Route("/categories/add", name="add_category_form")
+     * @Route("/admin/categories/add", name="add_category_form")
      * @Method("GET")
      *
      * @return Response
      */
-    public function add()
+    public function addAction()
     {
         $form = $this->createForm(CategoryType::class);
-        return $this->render("categories/add.html.twig",
+        return $this->render("admin/categories/add.html.twig",
             [
                 'categoryForm' => $form->createView()
             ]
@@ -47,13 +47,13 @@ class CategoryController extends Controller
     }
 
     /**
-     * @Route("categories/add", name="add_category_process")
+     * @Route("/admin/categories/add", name="add_category_process")
      * @Method("POST")
      *
      * @param Request $request
      * @return Response
      */
-    public function addProcess(Request $request)
+    public function addProcessAction(Request $request)
     {
         $category = new Category();
         $form = $this->createForm(CategoryType::class, $category);
@@ -70,7 +70,7 @@ class CategoryController extends Controller
             return $this->redirectToRoute("all_categories");
         }
 
-        return $this->render("categories/add.html.twig",
+        return $this->render("admin/categories/add.html.twig",
             [
                 'categoryForm' => $form->createView()
             ]
@@ -78,22 +78,22 @@ class CategoryController extends Controller
     }
 
     /**
-     * @Route("/categories/edit/{id}", name="edit_category_form")
+     * @Route("/admin/categories/edit/{id}", name="edit_category_form")
      * @Method("GET")
      *
      * @param Category $category
      * @return Response
      */
-    public function edit(Category $category)
+    public function editAction(Category $category)
     {
         $form = $this->createForm(CategoryType::class, $category);
 
-        return $this->render("categories/edit.html.twig",
+        return $this->render("admin/categories/edit.html.twig",
             ['categoryForm' => $form->createView()]);
     }
 
     /**
-     * @Route("/categories/edit/{id}", name="edit_category_process")
+     * @Route("/admin/categories/edit/{id}", name="edit_category_process")
      * @Method("POST")
      *
      * @param Category $category
@@ -101,7 +101,7 @@ class CategoryController extends Controller
      *
      * @return Response
      */
-    public function editProcess(Category $category, Request $request)
+    public function editProcessAction(Category $category, Request $request)
     {
         $form = $this->createForm(CategoryType::class, $category);
         $form->handleRequest($request);
@@ -117,7 +117,7 @@ class CategoryController extends Controller
             return $this->redirectToRoute("all_categories");
         }
 
-        return $this->render("categories/add.html.twig",
+        return $this->render("admin/categories/add.html.twig",
             [
                 'categoryForm' => $form->createView()
             ]
@@ -125,13 +125,13 @@ class CategoryController extends Controller
     }
 
     /**
-     * @Route("/categories/delete/{id}", name="delete_category_process")
+     * @Route("/admin/categories/delete/{id}", name="delete_category_process")
      * @Method("POST")
      *
      * @param Category $category
      * @return Response
      */
-    public function delete(Category $category)
+    public function deleteAction(Category $category)
     {
         $em = $this->getDoctrine()->getManager();
         $em->remove($category);

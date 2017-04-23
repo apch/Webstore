@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace AdminBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Category
  *
  * @ORM\Table(name="categories")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\CategoryRepository")
+ * @ORM\Entity(repositoryClass="AdminBundle\Repository\CategoryRepository")
  */
 class Category
 {
@@ -32,7 +32,7 @@ class Category
     /**
      * @var ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Product", mappedBy="categories")
+     * @ORM\ManyToMany(targetEntity="AdminBundle\Entity\Product", mappedBy="categories")
      */
     private $products;
 

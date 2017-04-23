@@ -1,9 +1,9 @@
 <?php
 
-namespace AppBundle\Controller;
+namespace AdminBundle\Controller;
 
-use AppBundle\Entity\Product;
-use AppBundle\Form\ProductType;
+use AdminBundle\Entity\Product;
+use AdminBundle\Form\ProductType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -15,17 +15,17 @@ use Symfony\Component\HttpFoundation\Response;
 class ProductController extends Controller
 {
     /**
-     * @Route("/products", name="all_products")
+     * @Route("/admin/products", name="all_products")
      *
      * @return Response
      */
-    public function viewAll()
+    public function viewAllAction()
     {
         $products = $this->getDoctrine()
             ->getRepository(Product::class)
             ->findBy([], ['price' => 'asc', 'name' => 'asc']);
 
-        return $this->render('products/view_all.html.twig',
+        return $this->render('admin/products/view_all.html.twig',
             [
                 'products' => $products
             ]
@@ -33,15 +33,15 @@ class ProductController extends Controller
     }
 
     /**
-     * @Route("/products/add", name="add_product_form")
+     * @Route("/admin/products/add", name="add_product_form")
      * @Method("GET")
      *
      * @return Response
      */
-    public function add()
+    public function addAction()
     {
         $form = $this->createForm(ProductType::class);
-        return $this->render("products/add.html.twig",
+        return $this->render("admin/products/add.html.twig",
             [
                 'productForm' => $form->createView()
             ]
@@ -49,13 +49,13 @@ class ProductController extends Controller
     }
 
     /**
-     * @Route("products/add", name="add_product_process")
+     * @Route("/admin/products/add", name="add_product_process")
      * @Method("POST")
      *
      * @param Request $request
      * @return Response
      */
-    public function addProcess(Request $request)
+    public function addProcessAction(Request $request)
     {
         $product = new Product();
         $form = $this->createForm(ProductType::class, $product);
@@ -81,7 +81,7 @@ class ProductController extends Controller
             return $this->redirectToRoute("all_products");
         }
 
-        return $this->render("products/add.html.twig",
+        return $this->render("admin/products/add.html.twig",
             [
                 'productForm' => $form->createView()
             ]
@@ -89,13 +89,13 @@ class ProductController extends Controller
     }
 
     /**
-     * @Route("/products/edit/{id}", name="edit_product_form")
+     * @Route("/admin/products/edit/{id}", name="edit_product_form")
      * @Method("GET")
      *
      * @param Product $product
      * @return Response
      */
-    public function edit(Product $product)
+    public function editAction(Product $product)
     {
         $product->setImageUrl(
             new File($this->getParameter('products_images_directory').'/'.$product->getImageUrl())
@@ -103,12 +103,12 @@ class ProductController extends Controller
         echo $product->getImageUrl();
         $form = $this->createForm(ProductType::class, $product);
 
-        return $this->render("products/edit.html.twig",
+        return $this->render("admin/products/edit.html.twig",
             ['productForm' => $form->createView()]);
     }
 
     /**
-     * @Route("/products/edit/{id}", name="edit_product_process")
+     * @Route("/admin/products/edit/{id}", name="edit_product_process")
      * @Method("POST")
      *
      * @param Product $product
@@ -116,7 +116,7 @@ class ProductController extends Controller
      *
      * @return Response
      */
-    public function editProcess(Product $product, Request $request)
+    public function editProcessAction(Product $product, Request $request)
     {
         $product->setImageUrl(
             new File($this->getParameter('products_images_directory').'/'.$product->getImageUrl())
@@ -144,7 +144,7 @@ class ProductController extends Controller
             return $this->redirectToRoute("all_products");
         }
 
-        return $this->render("products/add.html.twig",
+        return $this->render("admin/products/add.html.twig",
             [
                 'productForm' => $form->createView()
             ]
@@ -152,13 +152,13 @@ class ProductController extends Controller
     }
 
     /**
-     * @Route("/products/delete/{id}", name="delete_product_process")
+     * @Route("/admin/products/delete/{id}", name="delete_product_process")
      * @Method("POST")
      *
      * @param Product $product
      * @return Response
      */
-    public function delete(Product $product)
+    public function deleteAction(Product $product)
     {
         $em = $this->getDoctrine()->getManager();
         $em->remove($product);

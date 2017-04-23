@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Entity;
+namespace AdminBundle\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
@@ -11,7 +11,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * Product
  *
  * @ORM\Table(name="products")
- * @ORM\Entity(repositoryClass="AppBundle\Repository\ProductRepository")
+ * @ORM\Entity(repositoryClass="AdminBundle\Repository\ProductRepository")
  */
 class Product
 {
@@ -81,7 +81,7 @@ class Product
     /**
      * @var ArrayCollection
      *
-     * @ORM\ManyToMany(targetEntity="AppBundle\Entity\Category")
+     * @ORM\ManyToMany(targetEntity="AdminBundle\Entity\Category")
      * @ORM\JoinTable(name="products_categories",
      *      joinColumns = {@ORM\JoinColumn(name="product_id", referencedColumnName="id")},
      *      inverseJoinColumns={@ORM\JoinColumn(name="category_id", referencedColumnName="id")}

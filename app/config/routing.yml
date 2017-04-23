@@ -1,3 +1,11 @@
+store:
+    resource: "@StoreBundle/Controller/"
+    type:     annotation
+    prefix:   /
+
 app:
-    resource: '@AppBundle/Controller/'
+    resource: '@AdminBundle/Controller/'
     type: annotation
+
+_liip_imagine:
+    resource: "@LiipImagineBundle/Resources/config/routing.xml"

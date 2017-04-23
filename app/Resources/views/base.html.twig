@@ -51,6 +51,12 @@
                                         LOGIN
                                     </a>
                                 </li>
+                                <li>
+                                    <a href="#">
+                                        <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
+                                        {{ render(controller('StoreBundle:Cart:navbarCart')) }}
+                                    </a>
+                                </li>
                             {% endif %}
                         </ul>
                     </div>
@@ -83,8 +89,11 @@
     {% endblock %}
         {% block javascripts %}
             <script src="{{ asset('js/jquery-3.2.0.min.js') }}"></script>
+            <script src="{{ asset('js/js.cookie.js') }}"></script>
+            <script src="{{ asset('js/cart.js') }}"></script>
             <script src="{{ asset('js/tether.min.js') }}"></script>
             <script src="{{ asset('js/bootstrap.min.js') }}"></script>
+            <script src="{{ asset('js/bootstrap-confirmation.min.js') }}"></script>
         {% endblock %}
     </body>
 </html>

@@ -1,5 +1,51 @@
 {% extends 'base.html.twig' %}
 {% block main %}
+    <div id="products" class="row list-group">
+        {% if products|length %}
+            {% for product in products %}
+                <div class="item col-md-4 col-lg-3">
+                    <div class="thumbnail">
+                        <a href="">
+                            {% if product.imageUrl|length %}
+                                <img class="group list-group-image"
+                                     src="{{ asset( ('uploads/products/' ~ product.imageUrl) | imagine_filter('category_mainpage_thumb')) }}"
+                                     alt="{{ product.name }}"/>
+                            {% else %}
+                                <img class="group list-group-image"
+                                     src="{{ asset( ('uploads/products/70e552c4710ee49636d4023014a727bc.jpeg') | imagine_filter('category_mainpage_thumb')) }}"
+                                     alt="{{ product.name }}"/>
+                            {% endif %}
+
+                        </a>
+                        <div class="caption description-container id-row" data-id="{{ product.id }}">
+                            {% if product.name|length %}
+                                <a href="#"><span class="glyphicon glyphicon-heart like" aria-hidden="true"></span></a>
+                            {% else %}
+                                <a href="#"><span class="glyphicon glyphicon-heart-empty like" aria-hidden="true"></span></a>
+                            {% endif %}
+                            <a href="">
+                                <h4 class="group inner list-group-item-heading product-title">
+                                    {{ product.name }} ({{ product.quantity }})
+                                </h4>
+                            </a>
+                            <p class="lead price">
+                                <span>{{ product.price }}</span> Euro
+                            </p>
+                            <a class="btn btn-success addtocart-btn" href="#">Add to Cart</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <h3>no products</h3>
+        {% endif %}
+    </div>
+    <div class="row">
+        <div class="col-md-8 col-md-offset-4">
+            {{ knp_pagination_render(products) }}
+        </div>
+    </div>
+
     <a href="{{ path('all_products') }}">List of products</a>
     <br>
     <a href="{{ path('add_product_form') }}">Add a product</a>

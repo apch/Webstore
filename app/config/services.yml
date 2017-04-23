@@ -5,8 +5,8 @@ parameters:
 
 services:
     #service_name:
-    #    class: AppBundle\Directory\ClassName
+    #    class: AdminBundle\Directory\ClassName
     #    arguments: ['@another_service_name', 'plain_value', '%parameter_name%']
     app.product_image_uploader:
-        class: AppBundle\Services\FileUploader
+        class: AdminBundle\Services\FileUploader
         arguments: ['%products_images_directory%']
