@@ -30,6 +30,13 @@
                             </a>
                             <p class="lead price">
                                 <span>{{ product.price }}</span> Euro
+
+                                {%  set product_promotion = calc.calculate(product) %}
+
+                                {% if product_promotion != product.price %}
+                                    <del>{{ product.price | number_format(2) }}</del><br />
+                                {% endif %}
+                                {{ product_promotion | number_format(2) }}
                             </p>
                             <a class="btn btn-success addtocart-btn" href="#">Add to Cart</a>
                         </div>

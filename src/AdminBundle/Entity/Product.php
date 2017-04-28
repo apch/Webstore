@@ -89,6 +89,11 @@ class Product
      */
     private $categories;
 
+    /**
+     * @ORM\OneToMany(targetEntity="AdminBundle\Entity\Promotion", mappedBy="products")
+     */
+    private $promotions;
+
 
     public function __construct()
     {

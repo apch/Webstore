@@ -10,3 +10,14 @@ services:
     app.product_image_uploader:
         class: AdminBundle\Services\FileUploader
         arguments: ['%products_images_directory%']
+    repo.promotions:
+        class: Doctrine\ORM\EntityRepository
+        factory: ["@doctrine.orm.entity_manager", getRepository]
+        arguments:
+            - \AdminBundle\Entity\Promotion
+    promotion_manager:
+        class: AdminBundle\Services\PromotionManager
+        arguments: ['@repo.promotions']
+    app.price_calculator:
+        class: AdminBundle\Services\PriceCalculator
+        arguments: ['@promotion_manager']

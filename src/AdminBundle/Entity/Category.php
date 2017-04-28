@@ -29,12 +29,19 @@ class Category
      */
     private $name;
 
+//    /**
+//     * @var ArrayCollection
+//     *
+//     * @ORM\ManyToMany(targetEntity="AdminBundle\Entity\Product", mappedBy="categories")
+//     */
+//    private $products;
+
     /**
-     * @var ArrayCollection
-     *
-     * @ORM\ManyToMany(targetEntity="AdminBundle\Entity\Product", mappedBy="categories")
+     * @ORM\OneToMany(targetEntity="AdminBundle\Entity\Promotion", mappedBy="categories")
      */
-    private $products;
+    private $promotions;
+
+
 
     public function __construct()
     {
