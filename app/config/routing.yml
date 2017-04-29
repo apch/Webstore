@@ -3,9 +3,10 @@ store:
     type:     annotation
     prefix:   /
 
-app:
-    resource: '@AdminBundle/Controller/'
-    type: annotation
+admin:
+    resource: "@AdminBundle/Controller/"
+    type:     annotation
+    prefix:   /
 
 _liip_imagine:
     resource: "@LiipImagineBundle/Resources/config/routing.xml"

@@ -29,6 +29,7 @@ security:
                 # The name of the route where the login form lives
                 # When the user tries to access a protected page, they are redirected here
                 login_path: security_login
+                failure_path: security_login
                 # Secure the login form against CSRF
                 # Reference: http://symfony.com/doc/current/cookbook/security/csrf_in_login_form.html
                 csrf_token_generator: security.csrf.token_manager
@@ -37,10 +38,10 @@ security:
                 # The route name the user can go to in order to logout
                 path: security_logout
                 # The name of the route to redirect to after logging out
-                target: webstore_index
+                target: homepage
 
 
     access_control:
         # this is a catch-all for the admin area
         # additional security lives in the controllers
-#        - { path: '^/(%locale%)/admin', roles: ROLE_ADMIN }
+        - { path: '^/admin/', roles: [ROLE_ADMIN, ROLE_EDITOR] }

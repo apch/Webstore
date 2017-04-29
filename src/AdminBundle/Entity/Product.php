@@ -63,10 +63,17 @@ class Product
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="created_on", type="datetimetz", nullable=false, options={"default"="CURRENT_TIMESTAMP"})
+     * @ORM\Column(name="created_on", type="datetime", nullable=false, options={"default"="CURRENT_TIMESTAMP"})
      *
      */
     private $createdOn;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updated_on", type="datetime")
+     */
+    private $updatedOn;
 
 
     /**
@@ -76,6 +83,14 @@ class Product
      * @Assert\File(mimeTypes={"image/jpeg"})
      */
     private $imageUrl;
+
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="deleted", type="boolean", nullable=false)
+     */
+    private $deleted;
 
 
     /**
@@ -94,11 +109,18 @@ class Product
      */
     private $promotions;
 
+    /**
+     * @ORM\OneToOne(targetEntity="Featured", mappedBy="product")
+     */
+    private $featured;
+
 
     public function __construct()
     {
         $this->createdOn = new \DateTime();
+        $this->updatedOn = $this->createdOn;
         $this->categories = new ArrayCollection();
+        $this->productOrders = new ArrayCollection();
     }
 
     /**
@@ -221,6 +243,27 @@ class Product
         $this->createdOn = $createdOn;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getUpdatedOn()
+    {
+        return $this->updatedOn;
+    }
+
+    /**
+     * @param mixed $updatedOn
+     * @return Product
+     */
+    public function setUpdatedOn($updatedOn)
+    {
+        $this->updatedOn = $updatedOn;
+
+        return $this;
+    }
+
+
+
 
     public function getImageUrl()
     {
@@ -232,6 +275,39 @@ class Product
         $this->imageUrl = $imageUrl;
 
         return $this;
+    }
+
+    /**
+     * Add productOrders
+     *
+     * @param \AdminBundle\Entity\OrderProduct $productOrders
+     * @return Product
+     */
+    public function addProductOrder(\AdminBundle\Entity\OrderProduct $productOrders)
+    {
+        $this->productOrders[] = $productOrders;
+
+        return $this;
+    }
+
+    /**
+     * Remove productOrders
+     *
+     * @param \AdminBundle\Entity\OrderProduct $productOrders
+     */
+    public function removeProductOrder(\AdminBundle\Entity\OrderProduct $productOrders)
+    {
+        $this->productOrders->removeElement($productOrders);
+    }
+
+    /**
+     * Get productOrders
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getProductOrders()
+    {
+        return $this->productOrders;
     }
 
     /**
@@ -250,6 +326,51 @@ class Product
         $this->categories = $categories;
     }
 
+    /**
+     * Set featured
+     *
+     * @param \AdminBundle\Entity\Featured $featured
+     * @return Product
+     */
+    public function setFeatured(\AdminBundle\Entity\Featured $featured = null)
+    {
+        $this->featured = $featured;
+
+        return $this;
+    }
+
+    /**
+     * Get featured
+     *
+     * @return \AdminBundle\Entity\Featured
+     */
+    public function getFeatured()
+    {
+        return $this->featured;
+    }
+
+    /**
+     * Set deleted
+     *
+     * @param boolean $deleted
+     * @return Product
+     */
+    public function setDeleted($deleted)
+    {
+        $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    /**
+     * Get deleted
+     *
+     * @return boolean
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
+    }
 
 }
 

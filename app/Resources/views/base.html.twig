@@ -36,7 +36,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="{{ path('all_products') }}">
+                                    <a href="{{ path('security_logout') }}">
                                         Logout
                                     </a>
                                 </li>
@@ -52,7 +52,7 @@
                                     </a>
                                 </li>
                                 <li>
-                                    <a href="#">
+                                    <a href="{{ path('showcart') }}">
                                         <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
                                         {{ render(controller('StoreBundle:Cart:navbarCart')) }}
                                     </a>
@@ -68,7 +68,7 @@
     <div class="container body-container">
         {% block body %}
             <div class="row">
-                <div id="main" class="col-sm-9">
+                <div id="main" class="col-sm-12">
                     {% for msg in app.session.flashBag.get('success') %}
                         <div class="alert alert-success" role="alert">
                             {{ msg }}

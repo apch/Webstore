@@ -6,6 +6,7 @@ use AdminBundle\Entity\Product;
 use AdminBundle\Form\ProductType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -15,45 +16,52 @@ use Symfony\Component\HttpFoundation\Response;
 class ProductController extends Controller
 {
     /**
-     * @Route("/admin/products", name="all_products")
-     *
-     * @return Response
+     * @Route("/admin/products", name="admin_all_products")
+     * @Method("GET")
+     * @Template()
      */
-    public function viewAllAction()
+    public function viewAllAction(Request $request)
     {
-        $products = $this->getDoctrine()
-            ->getRepository(Product::class)
-            ->findBy([], ['price' => 'asc', 'name' => 'asc']);
+        $em = $this->getDoctrine()->getManager();
+        $productRepository = $em->getRepository('AdminBundle:Product');
+        $paginator = $this->get('knp_paginator');
 
-        return $this->render('admin/products/view_all.html.twig',
-            [
-                'products' => $products
-            ]
+        //if search is required
+        $searchWords = trim($request->get('search_words'));
+
+        $qb = $productRepository->searchProductsAdmin($searchWords);
+        $limit = $this->getParameter('admin_products_pagination_count');
+
+        $products = $paginator->paginate(
+            $qb,
+            $request->query->getInt('page', 1),
+            $limit
         );
+
+        return ['products' => $products,
+            'search_words' => $searchWords
+        ];
     }
 
     /**
-     * @Route("/admin/products/add", name="add_product_form")
+     * @Route("/admin/products/add", name="admin_add_product_form")
      * @Method("GET")
      *
-     * @return Response
+     * @Template()
      */
     public function addAction()
     {
         $form = $this->createForm(ProductType::class);
-        return $this->render("admin/products/add.html.twig",
-            [
-                'productForm' => $form->createView()
-            ]
-        );
+        return ['productForm' => $form->createView()];
     }
 
     /**
-     * @Route("/admin/products/add", name="add_product_process")
+     * @Route("/admin/products/add", name="admin_add_product_process")
      * @Method("POST")
      *
      * @param Request $request
-     * @return Response
+     * @return array|\Symfony\Component\HttpFoundation\RedirectResponse
+     * @Template("@Admin/Product/add.html.twig")
      */
     public function addProcessAction(Request $request)
     {
@@ -78,18 +86,14 @@ class ProductController extends Controller
 
             $this->addFlash("success", "Product with name ". $product->getName() . " was added successfully");
 
-            return $this->redirectToRoute("all_products");
+            return $this->redirectToRoute("admin_all_products");
         }
 
-        return $this->render("admin/products/add.html.twig",
-            [
-                'productForm' => $form->createView()
-            ]
-        );
+        return ['productForm' => $form->createView()];
     }
 
     /**
-     * @Route("/admin/products/edit/{id}", name="edit_product_form")
+     * @Route("/admin/products/edit/{id}", name="admin_edit_product_form")
      * @Method("GET")
      *
      * @param Product $product
@@ -108,7 +112,7 @@ class ProductController extends Controller
     }
 
     /**
-     * @Route("/admin/products/edit/{id}", name="edit_product_process")
+     * @Route("/admin/products/edit/{id}", name="admin_edit_product_process")
      * @Method("POST")
      *
      * @param Product $product
@@ -152,7 +156,7 @@ class ProductController extends Controller
     }
 
     /**
-     * @Route("/admin/products/delete/{id}", name="delete_product_process")
+     * @Route("/admin/products/delete/{id}", name="admin_delete_product_process")
      * @Method("POST")
      *
      * @param Product $product
