@@ -97,7 +97,8 @@ class ProductController extends Controller
      * @Method("GET")
      *
      * @param Product $product
-     * @return Response
+     * @return array
+     * @Template()
      */
     public function editAction(Product $product)
     {
@@ -107,8 +108,7 @@ class ProductController extends Controller
         echo $product->getImageUrl();
         $form = $this->createForm(ProductType::class, $product);
 
-        return $this->render("admin/products/edit.html.twig",
-            ['productForm' => $form->createView()]);
+        return ['productForm' => $form->createView()];
     }
 
     /**
@@ -118,7 +118,7 @@ class ProductController extends Controller
      * @param Product $product
      * @param Request $request
      *
-     * @return Response
+     * @return array|Response
      */
     public function editProcessAction(Product $product, Request $request)
     {
@@ -145,14 +145,10 @@ class ProductController extends Controller
 
             $this->addFlash("success", "Product with name ". $product->getName() . " was edited successfully");
 
-            return $this->redirectToRoute("all_products");
+            return $this->redirectToRoute("admin_all_products");
         }
 
-        return $this->render("admin/products/add.html.twig",
-            [
-                'productForm' => $form->createView()
-            ]
-        );
+        return ['productForm' => $form->createView()];
     }
 
     /**
@@ -168,6 +164,6 @@ class ProductController extends Controller
         $em->remove($product);
         $em->flush();
         $this->addFlash("delete", "Product deleted!!!");
-        return $this->redirectToRoute("all_products");
+        return $this->redirectToRoute("admin_all_products");
     }
 }

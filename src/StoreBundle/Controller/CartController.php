@@ -2,11 +2,15 @@
 
 namespace StoreBundle\Controller;
 
+use AdminBundle\Entity\Orders;
 use AdminBundle\Entity\Product;
+use AdminBundle\Entity\User;
+use AdminBundle\Form\Type\OrdersType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Form;
 use Symfony\Component\HttpFoundation\Request;
 
 class CartController extends Controller
@@ -43,7 +47,8 @@ class CartController extends Controller
 
                 $quantity = abs((int)$productQuantity);
                 $price = $product->getPrice();
-                $sum = $price * $quantity;
+                //$sum = $price * $quantity;
+                $sum = number_format($this->get('app.price_calculator')->calculate($product) * $quantity, 2);
 
                 $productPosition['product'] = $product;
                 $productPosition['quantity'] = $quantity;
@@ -90,11 +95,69 @@ class CartController extends Controller
              */
             $product = $productRepository->find((int)$productId);
             if (is_object($product)) {
-                $cartArray['cart']['sum'] += ($product->getPrice() * abs((int)$productQuantity));
+                $cartArray['cart']['sum'] += (number_format($this->get('app.price_calculator')->calculate($product) * abs((int)$productQuantity), 2));
                 $cartArray['cart']['quantity'] += abs((int)$productQuantity);
             }
         }
 
         return $cartArray;
+    }
+
+    /**
+     * Shows order form.
+     *
+     * @Route("/orderform", name="orderform")
+     * @Method({"GET", "POST"})
+     * @Template("/cart/orderForm.html.twig")
+     */
+    public function orderFormAction(Request $request)
+    {
+        $order = new Orders();
+        $form = $this->createForm(\StoreBundle\Form\OrdersType::class, $order);
+
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $orderSuccess = $this->get('app.utilities')->createOrderRecord($request, $order, $this->getUser());
+
+            if (!$orderSuccess) {
+                return $this->redirect($this->generateUrl('cartisempty')); //check valid cart
+            }
+
+            return $this->render('/cart/thankYou.html.twig'); //redirect to thankyou page
+        }
+
+        if (is_object($user = $this->getUser())) {
+            $this->fillWithUserData($user, $form);
+        }
+
+        return [
+            'order' => $order,
+            'ordersForm' => $form->createView()
+        ];
+    }
+
+    /**
+     * @param User $user
+     * @param Form $form
+     * @return void
+     */
+    private function fillWithUserData($user, $form)
+    {
+        $form->get('name')->setData($user->getFullName());
+        $form->get('email')->setData($user->getEmail());
+        $form->get('phone')->setData($user->getPhone());
+        $form->get('address')->setData($user->getAddress());
+    }
+
+    /**
+     * If cart is empty.
+     *
+     * @Route("/cartisempty", name="cartisempty")
+     * @Method("GET")
+     * @Template("/cart/cartIsEmpty.html.twig")
+     */
+    public function cartIsEmptyAction()
+    {
+        return [];
     }
 }

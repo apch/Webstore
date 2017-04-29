@@ -26,12 +26,7 @@
                         <ul class="nav navbar-nav navbar-right">
                             {% if app.user %}
                                 <li>
-                                    <a href="{{ path('add_product_form') }}">
-                                        Insert Product
-                                    </a>
-                                </li>
-                                <li>
-                                    <a href="{{ path('all_products') }}">
+                                    <a href="{{ path('admin_all_products') }}">
                                         My Profile
                                     </a>
                                 </li>
@@ -51,13 +46,13 @@
                                         LOGIN
                                     </a>
                                 </li>
-                                <li>
-                                    <a href="{{ path('showcart') }}">
-                                        <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
-                                        {{ render(controller('StoreBundle:Cart:navbarCart')) }}
-                                    </a>
-                                </li>
                             {% endif %}
+                            <li>
+                                <a href="{{ path('showcart') }}">
+                                    <span class="glyphicon glyphicon-shopping-cart" aria-hidden="true"></span>
+                                    {{ render(controller('StoreBundle:Cart:navbarCart')) }}
+                                </a>
+                            </li>
                         </ul>
                     </div>
                 </div>
