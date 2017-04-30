@@ -1,0 +1,44 @@
+{% extends '@Admin/admin.html.twig' %}
+
+{% block page_content -%}
+
+
+    <h3>{{ 'Category list' }}</h3>
+    <p>
+        <a href="{{ path('add_category_form') }}">
+            <span class="glyphicon glyphicon-plus"></span>
+            {{ 'Create a new category' }}
+        </a>
+        <br>
+        <a href="{{ path("add_category_promo_form") }}">
+            <span class="glyphicon glyphicon-plus"></span>
+            Add Promotion
+        </a>
+    </p>
+    <table class="records_list table table-striped">
+        <thead>
+        <tr>
+            <th class="col-md-1">{{ 'Index' }}</th>
+            <th class="col-md-8">{{ 'Name' }}</th>
+            <th class="col-md-2">{{ 'Actions' }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for index,category in categories %}
+            <tr>
+                <td>{{ index+1 }}</td>
+                <td>
+                    {{ category.name }}
+                </td>
+                <td>
+                    <a href="{{ path("edit_category_form", {'id':category.id}) }}">Edit</a><br>
+                    <form method="post" action="{{ path("delete_category_process", {'id':category.id}) }}">
+                        <button type="submit" class="btn btn-danger">Delete</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
+

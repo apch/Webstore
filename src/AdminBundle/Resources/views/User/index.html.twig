@@ -1,0 +1,49 @@
+{% extends '@Admin/admin.html.twig' %}
+
+{% block page_content -%}
+    <h3>{{ 'User list' }}</h3>
+
+    <table class="records_list table table-striped">
+        <thead>
+        <tr>
+            <th>{{ knp_pagination_sortable(entities, 'Username', 'u.username') }}</th>
+            <th>{{ knp_pagination_sortable(entities, 'Email', 'u.email') }}</th>
+            <th>{{ knp_pagination_sortable(entities, 'Registration date', 'u.joinDate') }}</th>
+            <th>{{ 'Orders' }}</th>
+            <th>{{ 'Actions' }}</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for entity in entities %}
+            <tr>
+                <td>
+                    {{ entity.username }}
+                </td>
+                <td>
+                    {{ entity.email }}
+                </td>
+                <td>
+                    {{ entity.joinDate|date('Y-m-d H:i') }}
+                </td>
+                <td>
+                    {% if entity.orders|length %}
+                        <a href="{{ path('admin_user_orders', {'id': entity.id}) }}">
+                            {{ 'Orders' }} ({{ entity.orders|length }})
+                        </a>
+                    {% else %}
+                        -
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ path('admin_user_info', {'id': entity.id}) }}">{{ 'Show' }}</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="row">
+        <div class="col-md-12">
+            {{ knp_pagination_render(entities) }}
+        </div>
+    </div>
+{% endblock page_content %}

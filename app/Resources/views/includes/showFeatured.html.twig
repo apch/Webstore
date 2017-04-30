@@ -1,0 +1,38 @@
+<div class="item col-md-4 col-lg-3">
+    <div class="thumbnail">
+        <a href="">
+            {% if product.imageUrl|length %}
+                <img class="group list-group-image"
+                     src="{{ asset( ('uploads/products/' ~ product.imageUrl) | imagine_filter('category_mainpage_thumb')) }}"
+                     alt="{{ product.name }}"/>
+            {% else %}
+                <img class="group list-group-image"
+                     src="{{ asset( ('uploads/products/70e552c4710ee49636d4023014a727bc.jpeg') | imagine_filter('category_mainpage_thumb')) }}"
+                     alt="{{ product.name }}"/>
+            {% endif %}
+
+        </a>
+        <div class="caption description-container id-row" data-id="{{ product.id }}">
+            {% if product.name|length %}
+                <a href="#"><span class="glyphicon glyphicon-heart like" aria-hidden="true"></span></a>
+            {% else %}
+                <a href="#"><span class="glyphicon glyphicon-heart-empty like" aria-hidden="true"></span></a>
+            {% endif %}
+            <a href="">
+                <h4 class="group inner list-group-item-heading product-title">
+                    {{ product.name }} ({{ product.quantity }})
+                </h4>
+            </a>
+            <p class="lead price">
+
+                {%  set product_promotion = calc.calculate(product) %}
+
+                {% if product_promotion != product.price %}
+                    <del>{{ product.price | number_format(2) }}</del>
+                {% endif %}
+                <span>{{ product_promotion | number_format(2) }}</span> Euro
+            </p>
+            <a class="btn btn-success addtocart-btn" href="#">Add to Cart</a>
+        </div>
+    </div>
+</div>

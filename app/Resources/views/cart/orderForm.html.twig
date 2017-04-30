@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+
+{% block main %}
+    <h2 class="text-center">{{ 'ORDER' }}</h2>
+    <hr>
+    <div class="container">
+        <div class="col-md-8 col-md-offset-2">
+            {{ form_start(ordersForm) }}
+            {{ form_widget(ordersForm) }}
+            <button type="submit" class="btn btn-primary" formnovalidate>Send</button>
+            {{ form_end(ordersForm, {'render_rest': false, }) }}
+        </div>
+    </div>
+    <div class="row">&nbsp;</div>
+{% endblock main %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(function () {
+            //total sum from navbar cart
+            var totalSum = $('#cart-sum').html();
+            $('#totalsum').html(totalSum);
+        });
+    </script>
+{% endblock javascripts %}

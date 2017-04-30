@@ -1,0 +1,134 @@
+{% extends 'base.html.twig' %}
+
+
+{% block main %}
+    <div class="row">
+        <div class="col-md-12">
+            {% if products|length %}
+                <div class="row">
+                    <div>
+                        <h2>My Shopping Cart</h2>
+                    </div>
+                </div>
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th></th>
+                        <th>Price</th>
+                        <th style="text-align: right;">Total Price</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for product in products %}
+                        <tr class="product-position">
+                            <td class="col-md-1">{{ loop.index }}</td>
+                            <td>
+                                <a href="#" class="thumbnail pull-left" style="margin-right: 15px;">
+                                        <img src="{{ asset( ('uploads/products/' ~ product.product.imageUrl) | imagine_filter('some_thumb')) }}"
+                                             alt="{{ product.product.name }}">
+                                </a>
+                                <div>
+                                    <a href="#">
+                                        <strong>{{ product.product.name }}</strong>
+                                    </a>
+                                    <ul class="list-unstyled">
+                                    </ul>
+                                </div>
+                            </td>
+                            <td class="col-md-2">
+                                <div class="form-group">
+                                    <div>
+                                        <input type="number" name="quantity" required="required" min="1"
+                                               data-id="{{ product.product.id }}" class="form-control quantity"
+                                               value="{{ product.quantity }}">
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col-md-1">
+                                <a href="#" class="btn btn-danger glyphicon glyphicon-remove product-remove"
+                                   data-toggle="confirmation" data-popout="true" data-placement="left">
+                                    <i class="icon-trash icon-white"></i>
+                                </a>
+                            </td>
+                            <td class="col-md-1 price">
+                                <span>{{ product.price }}</span>
+                            </td>
+                            <td class="col-md-1 sum" style="text-align: right">
+                                {{ product.sum }}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    <tfoot>
+                    <tr>
+                        <td colspan="6" style="text-align: right;">
+                            <strong>Total:</strong>
+                            <span class="totalsum">{{ totalsum }}</span>
+                        </td>
+                    </tr>
+                    </tfoot>
+                </table>
+                <div class="row">
+                    <div>
+                        <div class="pull-right">
+                            <a href="{{ path('orderform') }}" class="btn btn-success glyphicon glyphicon-ok"
+                               id="{% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}showModal{% endif %}">
+                                CHECKOUT
+                            </a>
+                            <a href="#" class="btn btn-danger glyphicon glyphicon-trash clear-cart"
+                               data-toggle="confirmation" data-popout="true" data-placement="left">
+                                Clear Cart
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            {% else %}
+                <div class="row">
+                    <div>
+                        <h2>{{ 'Your cart is empty' }}</h2>
+                        <p><a href="{{ path('homepage') }}">{{ 'Continue' }}</a></p>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="row">&nbsp;</div>
+    <!-- Modal -->
+    <div class="modal fade" id="authSuggest" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                                aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">{{ 'Please Register' }}</h4>
+                </div>
+                <div class="modal-body">
+                    {{ 'Register to checkout' }}
+                </div>
+                <div class="modal-footer">
+                    <a href="" class="btn btn-success">
+                        {{ 'Login' }}
+                    </a>
+                    <a href="" class="btn btn-success">
+                        {{ 'Register' }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock main %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        $(document).ready(function (e) {
+            $('#showModal').on('click', function (e) {
+                e.preventDefault();
+                $('#authSuggest').modal('show');
+            });
+        });
+    </script>
+{% endblock javascripts %}

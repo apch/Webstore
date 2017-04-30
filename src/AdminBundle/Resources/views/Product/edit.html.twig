@@ -1,0 +1,11 @@
+{% extends '@Admin/admin.html.twig' %}
+
+{% block page_content %}
+    <div class="well col-md-12 " style="margin-top: 20px;">
+        {{ form_start(productForm) }}
+        <legend>Edit Product</legend>
+        {{ form_widget(productForm) }}
+        <button type="submit" class="btn btn-primary" formnovalidate>Edit</button>
+        {{ form_end(productForm, {'render_rest': false, }) }}
+    </div>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% set route = app.request.get('_route') %}
+
+<ul class="nav nav-sidebar">
+    <li {{ route == 'admin_orders' ? 'class="active"' }}>
+        <a href="">Orders</a>
+    </li>
+    <li {{ route == 'admin_user_list' ? 'class="active"' }}>
+        <a href="">User List</a>
+    </li>
+</ul>
+
+<ul class="nav nav-sidebar">
+    <li {{ route == 'admin_product' ? 'class="active"' }}>
+        <a href="{{ path('admin_all_products') }}">Products</a>
+    </li>
+    <li {{ route == 'admin_category' ? 'class="active"' }}>
+        <a href="{{ path('all_categories') }}">Categories</a>
+    </li>
+    <li {{ route == 'admin_manufacturer' ? 'class="active"' }}>
+        <a href="">Promotions</a>
+    </li>
+</ul>
+
+<ul class="nav nav-sidebar">
+    <li {{ route == 'admin_featured' ? 'class="active"' }}>
+        <a href="">Featured Products</a>
+    </li>
+</ul>

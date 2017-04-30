@@ -1,0 +1,11 @@
+{% extends '@Admin/admin.html.twig' %}
+
+{% block page_content -%}
+    <div class="well col-md-12 " style="margin-top: 20px;">
+            {{ form_start(categoryForm) }}
+            <legend>Add Category</legend>
+            {{ form_widget(categoryForm) }}
+            <button type="submit" class="btn btn-primary" formnovalidate>Send</button>
+            {{ form_end(categoryForm, {'render_rest': false, }) }}
+    </div>
+{% endblock %}
