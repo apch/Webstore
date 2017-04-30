@@ -330,6 +330,7 @@ class Product
     /**
      * Set featured
      *
+     *
      * @param \AdminBundle\Entity\Featured $featured
      * @return Product
      */
