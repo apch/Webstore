@@ -5,7 +5,7 @@ namespace StoreBundle\Controller;
 use AdminBundle\Entity\Orders;
 use AdminBundle\Entity\Product;
 use AdminBundle\Entity\User;
-use AdminBundle\Form\Type\OrdersType;
+use AdminBundle\Form\OrdersType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -52,13 +52,15 @@ class CartController extends Controller
 
                 $productPosition['product'] = $product;
                 $productPosition['quantity'] = $quantity;
-                $productPosition['price'] = $price;
+                $productPosition['price'] = number_format($this->get('app.price_calculator')->calculate($product), 2);;
                 $productPosition['sum'] = $sum;
                 $totalSum += $sum;
 
                 $productsArray[] = $productPosition;
             }
         }
+
+        $calc = $this->get('app.price_calculator');
 
         return ['products' => $productsArray,
             'totalsum' => $totalSum
@@ -114,6 +116,7 @@ class CartController extends Controller
     {
         $order = new Orders();
         $form = $this->createForm(\StoreBundle\Form\OrdersType::class, $order);
+        $calc = $this->get('app.price_calculator');
 
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {

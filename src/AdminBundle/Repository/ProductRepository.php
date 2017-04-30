@@ -3,6 +3,8 @@
 namespace AdminBundle\Repository;
 
 
+use AdminBundle\Entity\Category;
+use AdminBundle\Entity\User;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 
@@ -55,6 +57,26 @@ class ProductRepository extends EntityRepository
         }
 
         $qb->andWhere(call_user_func_array([$qb->expr(), "orx"], $cqbORX));
+
+        return $qb;
+    }
+
+    /**
+     * @param Category $category
+     * @return QueryBuilder
+     */
+    public function findByCategoryQB($id)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb->select(['p', 'pfe'])
+            ->from('AdminBundle:Product', 'p')
+            ->innerJoin('p.categories', 'ca')
+            ->leftJoin('p.featured', 'pfe')
+            ->where('ca = :id')
+            ->andWhere('p.quantity > 0')
+            ->andWhere($qb->expr()->neq('p.deleted', 1))
+            ->setParameter('id', $id);
 
         return $qb;
     }

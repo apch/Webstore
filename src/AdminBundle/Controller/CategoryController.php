@@ -3,10 +3,14 @@
 namespace AdminBundle\Controller;
 
 use AdminBundle\Entity\Category;
+use AdminBundle\Entity\Promotion;
 use AdminBundle\Form\CategoryType;
+use AdminBundle\Form\PromoCategoryType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -15,7 +19,8 @@ class CategoryController extends Controller
     /**
      * @Route("/admin/categories", name="all_categories")
      *
-     * @return Response
+     * @return array
+     * @Template()
      */
     public function viewAllAction()
     {
@@ -23,27 +28,20 @@ class CategoryController extends Controller
             ->getRepository(Category::class)
             ->findAll();
 
-        return $this->render('admin/categories/view_all.html.twig',
-            [
-                'categories' => $categories
-            ]
-        );
+        return ['categories' => $categories];
     }
 
     /**
      * @Route("/admin/categories/add", name="add_category_form")
      * @Method("GET")
      *
-     * @return Response
+     * @return array
+     * @Template()
      */
     public function addAction()
     {
         $form = $this->createForm(CategoryType::class);
-        return $this->render("admin/categories/add.html.twig",
-            [
-                'categoryForm' => $form->createView()
-            ]
-        );
+        return ['categoryForm' => $form->createView()];
     }
 
     /**
@@ -70,7 +68,7 @@ class CategoryController extends Controller
             return $this->redirectToRoute("all_categories");
         }
 
-        return $this->render("admin/categories/add.html.twig",
+        return $this->render("@Admin/Category/add.html.twig",
             [
                 'categoryForm' => $form->createView()
             ]
@@ -82,14 +80,14 @@ class CategoryController extends Controller
      * @Method("GET")
      *
      * @param Category $category
-     * @return Response
+     * @return array
+     * @Template()
      */
     public function editAction(Category $category)
     {
         $form = $this->createForm(CategoryType::class, $category);
 
-        return $this->render("admin/categories/edit.html.twig",
-            ['categoryForm' => $form->createView()]);
+        return ['categoryForm' => $form->createView()];
     }
 
     /**
@@ -117,7 +115,7 @@ class CategoryController extends Controller
             return $this->redirectToRoute("all_categories");
         }
 
-        return $this->render("admin/categories/add.html.twig",
+        return $this->render("@Admin/Category/edit.html.twig",
             [
                 'categoryForm' => $form->createView()
             ]
@@ -138,5 +136,50 @@ class CategoryController extends Controller
         $em->flush();
         $this->addFlash("delete", "Category deleted!!!");
         return $this->redirectToRoute("all_categories");
+    }
+
+    /**
+     * @Route("/admin/categories/promo/add", name="add_category_promo_form")
+     * @Method("GET")
+     *
+     * @return array
+     * @Template()
+     */
+    public function addPromoAction()
+    {
+        $form = $this->createForm(PromoCategoryType::class);
+        return ['categoryPromoForm' => $form->createView()];
+    }
+
+    /**
+     * @Route("/admin/categories/promo/add", name="add_category_promo_process")
+     * @Method("POST")
+     *
+     * @param Request $request
+     * @return Response
+     */
+    public function addPromoProcessAction(Request $request)
+    {
+        $promotion = new Promotion();
+
+        $form = $this->createForm(PromoCategoryType::class, $promotion);
+        $form->handleRequest($request);
+
+        if($form->isValid()) {
+
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($promotion);
+            $em->flush();
+
+            $this->addFlash("success", "Promotion was added successfully");
+
+            return $this->redirectToRoute("all_categories");
+        }
+
+        return $this->render("@Admin/Category/addPromo.html.twig",
+            [
+                'categoryForm' => $form->createView()
+            ]
+        );
     }
 }

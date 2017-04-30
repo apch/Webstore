@@ -121,6 +121,7 @@ class Product
         $this->updatedOn = $this->createdOn;
         $this->categories = new ArrayCollection();
         $this->productOrders = new ArrayCollection();
+        $this->deleted = false;
     }
 
     /**

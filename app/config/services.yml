@@ -23,4 +23,4 @@ services:
         arguments: ['@promotion_manager']
     app.utilities:
         class: AdminBundle\Services\Utilities
-        arguments: ["@doctrine.orm.entity_manager"]
+        arguments: ["@doctrine.orm.entity_manager", "@app.price_calculator"]

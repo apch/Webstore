@@ -98,14 +98,13 @@ class ProductController extends Controller
      *
      * @param Product $product
      * @return array
-     * @Template()
+     * @Template("@Admin/Product/edit.html.twig")
      */
     public function editAction(Product $product)
     {
         $product->setImageUrl(
             new File($this->getParameter('products_images_directory').'/'.$product->getImageUrl())
         );
-        echo $product->getImageUrl();
         $form = $this->createForm(ProductType::class, $product);
 
         return ['productForm' => $form->createView()];
@@ -148,8 +147,12 @@ class ProductController extends Controller
             return $this->redirectToRoute("admin_all_products");
         }
 
-        return ['productForm' => $form->createView()];
+        return $this->render("@Admin/Product/edit.html.twig",
+            [
+                'productForm' => $form->createView()
+            ]);
     }
+
 
     /**
      * @Route("/admin/products/delete/{id}", name="admin_delete_product_process")
