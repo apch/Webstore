@@ -80,4 +80,24 @@ class ProductRepository extends EntityRepository
 
         return $qb;
     }
+
+    /**
+     * @param int $quantity
+     * @param User $user
+     * @return array
+     */
+    public function getFeatured($quantity = 1)
+    {
+        $qb = $this->getEntityManager()->createQueryBuilder();
+
+        $qb->select(['p', 'pfe'])
+            ->from('AdminBundle:Product', 'p')
+            ->innerJoin('p.featured', 'pfe')
+            ->where('p.quantity <> 0')
+            ->andWhere($qb->expr()->neq('p.deleted', 1))
+            ->setMaxResults($quantity)
+            ->addOrderBy('pfe.productOrder', 'DESC');
+
+        return $qb->getQuery()->getResult();
+    }
 }
